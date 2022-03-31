@@ -8,6 +8,8 @@ from scipy.fft import rfft, rfftfreq
 from scipy.fft import irfft
 import csv
 
+
+
 class FFTLine:
     def __init__(self,VoltageFile,FFTOutFile,SamplesPerPixel,CoilFrequency,SensorFrequency,SampleFrequency,Gain):
         self.VoltageFile = VoltageFile
@@ -18,72 +20,77 @@ class FFTLine:
         self.SampleFrequency = SampleFrequency
         self.Gain = Gain
         self.firstline = False
-        TotalColumns = open(self.VoltageFile,'r')
+        
         with open(self.VoltageFile, newline='') as TotalColumns: #finds out how many lines are in the file
             reader = csv.reader(TotalColumns)
             row_count = sum(1 for row in reader )  # gets the first line
             self.total_rows = row_count
-        TotalColumns.close()
-        #print("number of rows",self.total_rows)
+        print("number of rows",self.total_rows)
 
     def FFTData(self):
         f = open(self.FFTOutFile, 'w') # open the file in the write mode
         wtr = csv.writer(f, delimiter=',', lineterminator='\n')
-        acc = []
+
         with open(self.VoltageFile,'r') as fileobj:
             reader_obj = csv.reader(fileobj,quoting=csv.QUOTE_NONNUMERIC)
             rowCounter = 0
             for row in reader_obj:
                 rowCounter += 1
+                #this is dumb but it works
+                rowDf = pd.DataFrame(row)
+                
+                rowlist = rowDf.values.flatten()
+                
                 
                 
                 
                 
                 if (rowCounter)%2 == 0:
-                    row=row[::-1]
-                    acc.append(row)
-                else:
-                    acc.append(row)
+                    rowlist=rowlist[::-1]
+                    
+                    
 
 
+                #print(f'length of row should now be 10000: {len(rowlist)}')
+                def chunks(lst, n): # splits into chunks of n
+                    """Yield successive n-sized chunks from lst."""
+                    #print('calling chunks')
+                    for i in range(0, len(lst), n):
+                        yield lst[i:i + n]
 
-            def chunks(lst, n): # splits into chunks of n
-                """Yield successive n-sized chunks from lst."""
-                for i in range(0, len(lst), n):
-                    yield lst[i:i + n]
-
-
-            a = chunks(acc,self.SamplesPerPixel)
-            FFTLineabs = []
-            FFTLinemax = []
-            
-            for val in a:
-                print("val ", val)
-                FFTPixel = rfft(val/(self.Gain*1000)) #rfft((val/(100*1000)))*dt
-                FFTLineabs = abs(FFTPixel)
-                #plt.xlabel('Frequency (Hz)')
-                #plt.ylabel('Voltage (V)')
-            
-                freq=rfftfreq(len(val),d=dt)
-            
-                #plt.plot(freq,FFTLineabs)
-                #plt.show()
-                points_per_freq = len(FFTLineabs) / (SampFreq / 2)
-                CoilFreq = int(points_per_freq * self.CoilFrequency)
-                upperBandCutoff = int(points_per_freq * (self.CoilFrequency+self.SensorFrequency))
-                lowerBandCutoff = int(points_per_freq * (self.CoilFrequency-self.SensorFrequency)) ##get rid of 200KHz
-                SensorBias = int(points_per_freq * self.SensorFrequency) ##get rid of 30KHz
-                FFTLineabs[CoilFreq - 40 : CoilFreq + 40] = 0 ##Set Freq bin of Coil to 0
-                FFTLineabs[SensorBias - 50 : SensorBias + 50] = 0
-                FFTLineabs[upperBandCutoff +1: 10000000] = 0 ##Set Sensor Biasing Freq bin to 0
-                FFTLineabs[0 :  lowerBandCutoff-1] = 0 ##Set DC Freq bin to 0
-            
-            
-               # plt.plot(freq,FFTLineabs)
-               # plt.show()
-                #FFTLineabs[counter] = abs(FFTPixel)
                 
-                FFTLinemax.append(np.amax(FFTLineabs)) #add largest absolute values to array
+                a = chunks(rowlist,self.SamplesPerPixel)
+                
+                FFTLineabs = []
+                FFTLinemax = []
+                dt = 1/self.SampleFrequency
+                for val in a:
+                    
+                    FFTPixel = rfft(val/(self.Gain*1000)) #rfft((val/(100*1000)))*dt
+                    FFTLineabs = abs(FFTPixel)
+                    #plt.xlabel('Frequency (Hz)')
+                    #plt.ylabel('Voltage (V)')
+                
+                    freq=rfftfreq(len(val),d=dt)
+                
+                    plt.plot(freq,FFTLineabs)
+                    plt.show()
+                    points_per_freq = len(FFTLineabs) / (self.SampleFrequency / 2)
+                    CoilFreq = int(points_per_freq * self.CoilFrequency)
+                    upperBandCutoff = int(points_per_freq * (self.CoilFrequency+self.SensorFrequency))
+                    lowerBandCutoff = int(points_per_freq * (self.CoilFrequency-self.SensorFrequency)) ##get rid of 200KHz
+                    SensorBias = int(points_per_freq * self.SensorFrequency) ##get rid of 30KHz
+                    FFTLineabs[CoilFreq - 40 : CoilFreq + 40] = 0 ##Set Freq bin of Coil to 0
+                    FFTLineabs[SensorBias - 50 : SensorBias + 50] = 0
+                    FFTLineabs[upperBandCutoff +1: 10000000] = 0 ##Set Sensor Biasing Freq bin to 0
+                    FFTLineabs[0 :  lowerBandCutoff-1] = 0 ##Set DC Freq bin to 0
+                
+                
+                # plt.plot(freq,FFTLineabs)
+                # plt.show()
+                    #FFTLineabs[counter] = abs(FFTPixel)
+                    
+                    FFTLinemax.append(np.amax(FFTLineabs)) #add largest absolute values to array
             wtr.writerow(FFTLinemax)
             '''
             if self.firstline == False: 

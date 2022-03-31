@@ -1,5 +1,5 @@
 from logging import exception
-import pico5000 as pico5000
+
 import pico5000withC as pico5000_fuckaround
 #pico5000.PicoVal('PicoValues.csv',"PS5000A_DR_16BIT",'PS5000A_1V',1,'PS5000A_US',100,1)
 import sys
