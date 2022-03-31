@@ -1,5 +1,5 @@
 from logging import exception
-import pico5000 as pico5000
+
 import pico5000withC as pico5000_fuckaround
 #pico5000.PicoVal('PicoValues.csv',"PS5000A_DR_16BIT",'PS5000A_1V',1,'PS5000A_US',100,1)
 import sys
@@ -9,7 +9,7 @@ import numpy as np
 import threading
 import concurrent.futures
 import time
-import FFTLinePixelsRows as FFTLinePixels
+import FFTLinePixelsCVersion as FFTLinePixels
 import sys
 import glob
 import serial
@@ -104,7 +104,7 @@ if __name__ == '__main__':
     #motordll.YAxismoveToPositionN(0)
     
     
-    BufferSize = 10000
+    BufferSize = 20000000
     Captures = 1
     #captures, blocks of buffers
      # self,OFileName,BitRes,VoltRange,SampInterval,SampIntUnit,BuffSize,Caps

@@ -182,7 +182,6 @@ class StreamData:
         # handle = chandle
         self.status["stop"] = ps.ps5000aStop(self.chandle)
         assert_pico_ok(self.status["stop"])
-
         # Disconnect the scope
         # handle = chandle
         self.status["close"] = ps.ps5000aCloseUnit(self.chandle)
