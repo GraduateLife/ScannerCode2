@@ -24,21 +24,26 @@ class FFTLine:
             row_count = sum(1 for row in reader )  # gets the first line
             self.total_rows = row_count
         TotalColumns.close()
-        print("number of rows",self.total_rows)
+        #print("number of rows",self.total_rows)
 
     def FFTData(self):
         f = open(self.FFTOutFile, 'w') # open the file in the write mode
         wtr = csv.writer(f, delimiter=',', lineterminator='\n')
         acc = []
-        with open(self.VoltageFile) as fileobj:
+        with open(self.VoltageFile,'r') as fileobj:
             reader_obj = csv.reader(fileobj,quoting=csv.QUOTE_NONNUMERIC)
-            rowNumber = 0
+            rowCounter = 0
             for row in reader_obj:
+                rowCounter += 1
                 
-                print(f'first 10 elements of row is : {row[:10]}')
-                if (rowNumber+1)%2 == 0:
-                    rowNumber=rowNumber[::-1]
-                    acc.append(rowNumber)
+                
+                
+                
+                if (rowCounter)%2 == 0:
+                    row=row[::-1]
+                    acc.append(row)
+                else:
+                    acc.append(row)
 
 
 
@@ -53,7 +58,7 @@ class FFTLine:
             FFTLinemax = []
             
             for val in a:
-                #print("val ", len(val))
+                print("val ", val)
                 FFTPixel = rfft(val/(self.Gain*1000)) #rfft((val/(100*1000)))*dt
                 FFTLineabs = abs(FFTPixel)
                 #plt.xlabel('Frequency (Hz)')
