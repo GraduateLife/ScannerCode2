@@ -111,6 +111,7 @@ if __name__ == '__main__':
     #captures, blocks of buffers
      # self,OFileName,BitRes,VoltRange,SampInterval,SampIntUnit,BuffSize,Caps
     #test1 = pico5000.StreamData('PicoValues.csv',"PS5000A_DR_16BIT",'PS5000A_5V',SamplingInterval,'PS5000A_NS',BufferSize,Captures)
+    fft = FFTLinePixels.FFTLine(VoltageFile,FFTOutFile,SamplesPerPixel,CoilFrequency,SensorFrequency,SamplingFrequency,Gain)
     test1 = pico5000_fuckaround.StreamData('PicoValues.csv',"PS5000A_DR_16BIT",'PS5000A_5V',SamplingInterval,'PS5000A_NS',BufferSize,Captures)
  
     #t1 = threading.Thread(target=test1.GetVal)
@@ -123,22 +124,49 @@ if __name__ == '__main__':
     motordll.XAxismoveToPositionN(19500)
     t1.join()
 
+    
+    rowCounter = 0
+    for z in range(10):
+        if rowCounter == 0: 
+            picoT1 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            rowCounter += 1
+            picoT2 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            rowCounter += 1
+            picoT1.start()
+            motordll.XAxismoveToPositionN(19500)
+            picoT1.join()
+            fftT1 = threading.Thread(target=fft.FFTData,args=(rowCounter,))
+            motordll.YAxismoveToPositionN((400*z)+200)
+            picoT2.start()
+            fftT1.start()
+            motordll.XAxismoveToPositionN(0)
+            picoT2.join()
+            ftT1.join()
+            motordll.YAxismoveToPositionN((400*z)+400)
+        else:
+            picoT1 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            fftT1 = threading.Thread(target=fft.FFTData,args=(rowCounter,))
+            rowCounter += 1
+            picoT2 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            fftT2 = threading.Thread(target=fft.FFTData,args=(rowCounter,))
+            rowCounter += 1
+            picoT1.start()
+            fftT1.start()
+            motordll.XAxismoveToPositionN(19500)
+            picoT1.join()
+            fftT1.join()
+    
+            motordll.YAxismoveToPositionN((400*z)+200)
+            picoT2.start()
+            fftT2.start()
+            motordll.XAxismoveToPositionN(0)
+            picoT2.join()
+            fftT2.join()
+            motordll.YAxismoveToPositionN((400*z)+400)
 
-    # callCounter = 0
-    # for z in range(10):
-    #       t1 = threading.Thread(target=test1.GetVal,args=(BufferSize,callCounter,))
-    #       callCounter += 1
-    #       t2 = threading.Thread(target=test1.GetVal,args=(BufferSize,callCounter,))
-    #       callCounter += 1
-    #       t1.start()
-    #       motordll.XAxismoveToPositionN(19500)
-    #       t1.join()
-    #       motordll.YAxismoveToPositionN((400*z)+200)
-    #       t2.start()
-    #       motordll.XAxismoveToPositionN(0)
-    #       t2.join()
-    #       motordll.YAxismoveToPositionN((400*z)+400)
-    #motordll.XAxismoveToPositionN(0)
+
+        
+    motordll.XAxismoveToPositionN(0)
     SamplesPerPixel = 25600
    
     SensorFrequency = 30000
@@ -146,10 +174,9 @@ if __name__ == '__main__':
     Gain = 100
 
     VoltageFile = 'Ctesting.csv'
-    FFTOutFile = 'IndexInvertNew.csv'
+    FFTOutFile = 'FFTOutput.csv'
 
 
-    fft = FFTLinePixels.FFTLine(VoltageFile,FFTOutFile,SamplesPerPixel,CoilFrequency,SensorFrequency,SamplingFrequency,Gain)
     fft.FFTData()
     # # t1.start()
     # # t2.start()

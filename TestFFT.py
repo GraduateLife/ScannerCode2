@@ -5,7 +5,7 @@ FFTOutFile = 'IndexInvertNew.csv'
 #FFTOutFile = 'LineDataTest.csv'
 SamplesPerPixel =  25600
 
-SensorFrequency = 30000
+SensorFrequency = 33000
     
 Gain = 100
 
@@ -13,10 +13,10 @@ Gain = 100
 
 # SamplesPerPixel =  10000
 CoilFrequency = 400e3
-SensorFrequency = 30e3
+SensorFrequency = 33e3
 SamplingFrequency = 1/(512*1e-9)
 Gain = 100
-for x in range(int(1e6)):
-    test1 = FFTLinePixels.FFTLine(VoltageFile,FFTOutFile,SamplesPerPixel,CoilFrequency,SensorFrequency,SamplingFrequency,Gain)
-    test1.FFTData()
+
+test1 = FFTLinePixels.FFTLine(VoltageFile,FFTOutFile,SamplesPerPixel,CoilFrequency,SensorFrequency,SamplingFrequency,Gain)
+test1.FFTData()
 

@@ -108,7 +108,7 @@ class StreamData:
         assert_pico_ok(self.status["setDataBuffersA"])
 
         
-    def GetVal(self,userSamples,callCounter):
+    def GetVal(self,userSamples,rowCounter):
          tic = time.perf_counter()
          if(userSamples !=0):
             self.totalSamples = userSamples
@@ -168,7 +168,7 @@ class StreamData:
          print(f'Finished Getting Values in {toc - tic:0.4f} seconds')
          
          tic = time.perf_counter()
-         filename = 'Ctesting'
+         filename = f'Row{rowCounter}'
          string1 : ctypes.Array[ctypes.c_char] = ctypes.create_string_buffer(bytes(filename,'utf-8'))
          #bufferConversion = (ctypes.c_int16 * len(bufferCompleteA))(*bufferCompleteA)
          arrayPointer = ctypes.POINTER(ctypes.c_int16)
