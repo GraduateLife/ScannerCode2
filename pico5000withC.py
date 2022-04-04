@@ -172,7 +172,7 @@ class StreamData:
          string1 : ctypes.Array[ctypes.c_char] = ctypes.create_string_buffer(bytes(filename,'utf-8'))
          #bufferConversion = (ctypes.c_int16 * len(bufferCompleteA))(*bufferCompleteA)
          arrayPointer = ctypes.POINTER(ctypes.c_int16)
-         filewrite.write_to_csv(string1,bufferCompleteA.ctypes.data_as(arrayPointer),len(bufferCompleteA),callCounter)
+         filewrite.write_to_csv(string1,bufferCompleteA.ctypes.data_as(arrayPointer),len(bufferCompleteA),rowCounter)
         
          toc = time.perf_counter()
          print(f"Done writing in {toc - tic:0.4f} .")
