@@ -7,13 +7,15 @@ import random
 import numpy as np
 import scipy.misc
 import imageio
-
+import os
 
 image_array = pd.read_csv('FFTOutput.csv')
 
 
 
 imageio.imwrite('outfile.jpg', image_array)
+
+
 
 
 

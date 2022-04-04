@@ -1,6 +1,6 @@
 
 def param(SamplingF,mm):
-    motorSpeed = 100
+    motorSpeed = 400
     pulseDiv = 4 
     numerator = (16 * 10e6 * motorSpeed)
     denom = (2**pulseDiv)*2048*32

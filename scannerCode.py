@@ -1,6 +1,6 @@
 from logging import exception
 
-import pico5000withC as pico5000_fuckaround
+import pico5000withMadness as pico5000_fuckaround
 #pico5000.PicoVal('PicoValues.csv',"PS5000A_DR_16BIT",'PS5000A_1V',1,'PS5000A_US',100,1)
 import sys
 import glob
@@ -9,7 +9,7 @@ import numpy as np
 import threading
 import concurrent.futures
 import time
-import FFTLinePixelsCVersion as FFTLinePixels
+import FFTLinePixelsVariableVersion as FFTLinePixels
 import sys
 import glob
 import serial
@@ -71,7 +71,7 @@ def MotorStartup():
     motordll.openSerialPorts(string1,string2,string3)
 
     motordll.checkMotorAssignment()
-    checkMotors = motordll.motorSetup(100)
+    checkMotors = motordll.motorSetup(400)
     
     if checkMotors != 1:
         return 0
@@ -137,15 +137,15 @@ if __name__ == '__main__':
 
     
     rowCounter = 0
-    totalRows = 50
+    totalRows = 90
     for z in range(int(totalRows/2)):
         if rowCounter == 0: 
-            picoT1 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            picoT1 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,fft))
             print(f'writing to row {rowCounter}')
-            fftT1 = threading.Thread(target=fft.FFTData,args=(rowCounter,))
+            #fftT1 = threading.Thread(target=fft.FFTData,args=(rowCounter,))
             print(f'fft of row {rowCounter}')
             rowCounter += 1
-            picoT2 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            picoT2 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,fft))
             print(f'writing to row {rowCounter}')
             rowCounter += 1
             picoT1.start()
@@ -153,36 +153,36 @@ if __name__ == '__main__':
             picoT1.join()
             motordll.YAxismoveToPositionN((400*z)+200)
             picoT2.start()
-            fftT1.start()
+            #fftT1.start()
             motordll.XAxismoveToPositionN(0)
             picoT2.join()
-            fftT1.join()
+            #fftT1.join()
             motordll.YAxismoveToPositionN((400*z)+400)
             
         else:
-            picoT1 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            picoT1 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,fft))
             print(f'writing to row {rowCounter}')
-            fftT1 = threading.Thread(target=fft.FFTData,args=((rowCounter-1),))
+            #fftT1 = threading.Thread(target=fft.FFTData,args=((rowCounter-1),))
             print(f'fft of row {rowCounter -1}')
 
             rowCounter += 1
-            picoT2 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,))
+            picoT2 = threading.Thread(target=test1.GetVal,args=(BufferSize,rowCounter,fft))
             print(f'writing to row {rowCounter}')
             fftT2 = threading.Thread(target=fft.FFTData,args=((rowCounter -1),))
             print(f'fft of row {rowCounter -1}')
             rowCounter += 1
             picoT1.start()
-            fftT1.start()
+            #fftT1.start()
             motordll.XAxismoveToPositionN(nosteps)
             picoT1.join()
-            fftT1.join()
+            #fftT1.join()
     
             motordll.YAxismoveToPositionN((400*z)+200)
             picoT2.start()
-            fftT2.start()
+            #fftT2.start()
             motordll.XAxismoveToPositionN(0)
             picoT2.join()
-            fftT2.join()
+            #fftT2.join()
             motordll.YAxismoveToPositionN((400*z)+400)
             
 
@@ -190,7 +190,7 @@ if __name__ == '__main__':
         
 
 
-    fft.FFTData(totalRows)    
+    
     # # t1.start()
     # # t2.start()
     # # t2.join()

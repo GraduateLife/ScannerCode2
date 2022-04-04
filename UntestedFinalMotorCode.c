@@ -269,9 +269,9 @@ GetResult(hComm2,&Address,&Status,&Value);
 SendCmd(hComm3,Address,TMCL_SAP,0x8C,0x00,3);
 GetResult(hComm3,&Address,&Status,&Value);
 
-SendCmd(hComm,Address,TMCL_SAP,0x04,0x00,motorSpeed);
+SendCmd(hComm,Address,TMCL_SAP,0x04,0x00,100);
 GetResult(hComm,&Address,&Status,&Value);  //Set Maximum positioning speed
-SendCmd(hComm2,Address,TMCL_SAP,0x04,0x00,motorSpeed);
+SendCmd(hComm2,Address,TMCL_SAP,0x04,0x00,100);
 GetResult(hComm2,&Address,&Status,&Value);
 SendCmd(hComm3,Address,TMCL_SAP,0x04,0x00,motorSpeed);
 GetResult(hComm3,&Address,&Status,&Value);
@@ -349,11 +349,11 @@ int XAxismoveToPositionN(INT Position){
 	
 	SendCmd(hComm3,Address,TMCL_MVP,0x00,0x00,Position);
 	GetResult(hComm3,&Address,&Status,&Value);
-	/*
+	
 	if(Status == 6){
 		printf("Issue with motor power, do not proceed \n");
 		return 0;
-	*/
+	
 	
 	SendCmd(hComm3,Address,TMCL_GAP,0x08,0x00,0);
 	GetResult(hComm3,&Address,&Status,&Value);
