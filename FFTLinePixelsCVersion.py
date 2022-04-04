@@ -8,6 +8,7 @@ from scipy.fft import rfft, rfftfreq
 from scipy.fft import irfft
 import csv
 from scipy.signal import butter, lfilter
+import os
 
 class FFTLine:
     def __init__(self,FFTOutFile,SamplesPerPixel,CoilFrequency,SensorFrequency,SampleFrequency,Gain):
@@ -115,7 +116,7 @@ class FFTLine:
                 aver = 0
                 sum = 0
                 wtr.writerow(FFTLinemax)
-                #os.system(f'rm Row{rowCounter}.csv')
+                os.system(f'del Row{rowCounter}.csv')
                 
             '''
             if self.firstline == False: 
