@@ -81,7 +81,10 @@ if __name__ == "__main__":
 
     motorWrapper.MotorStartup(parameterDictionary["motorSpeed"])
     print(parameterDictionary)
-    Scan(parameterDictionary["nOfRows"],parameterDictionary["bufferSize"],parameterDictionary["xStepRange"],parameterDictionary["yIncrement"],fft,picoOb)
+    Scan(parameterDictionary["nOfRows"],
+        parameterDictionary["bufferSize"],
+        parameterDictionary["xStepRange"],
+        parameterDictionary["yIncrement"],fft,picoOb)
     motorWrapper.moveX(0)
     motorWrapper.moveY(0)
     picoOb.ClosePico()
