@@ -1,6 +1,11 @@
 
-def param(SamplingF,mm,motorSpeed):
+def param(SamplingF,mm,motorSpeed,yMM,yResolution):
     
+    yTotalSteps = yMM *200
+    yIncrements = yMM/yResolution
+    yStepIncrement = yTotalSteps/yIncrements
+
+
     pulseDiv = 4 
     numerator = (16 * 10e6 * motorSpeed)
     denom = (2**pulseDiv)*2048*32
@@ -46,7 +51,7 @@ def param(SamplingF,mm,motorSpeed):
     print(numberofsteps)
     print(NumberOfSamples)
     print(PixelsPerSample)
-    return numberofsteps, NumberOfSamples, PixelsPerSample
+    return numberofsteps, NumberOfSamples, PixelsPerSample, yStepIncrement, yIncrements
 
 
 

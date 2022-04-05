@@ -22,8 +22,8 @@ filewrite = ctypes.CDLL('./fileio.dll')
 #BuffSize e.g. any int < 64M
 #Caps e.g. any int < 250k
 class StreamData:
-    def __init__(self,OFileName,BitRes,VoltRange,SampInterval,SampIntUnit,BuffSize,Caps):
-        self.OFileName = OFileName
+    def __init__(self,BitRes,VoltRange,SampInterval,SampIntUnit,BuffSize,Caps):
+        
         self.BitRes = BitRes
         self.VoltRange = VoltRange
         self.SampInterval = SampInterval
@@ -35,8 +35,7 @@ class StreamData:
         self.chandle = ctypes.c_int16()
         self.status = {}
 
-        f = open(self.OFileName, 'w') # open the file in the write mode
-        f.close()
+        
 
         # Open PicoScope 5000 Series device
         # Resolution set to 16 Bit

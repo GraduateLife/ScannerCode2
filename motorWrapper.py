@@ -73,4 +73,4 @@ def moveX(stepsToMove):
     motordll.XAxismoveToPositionN(stepsToMove)
 
 def moveY(stepsToMove):
-    motordll.YAxismoveToPositionN(stepsToMove)
+    motordll.YAxismoveToPositionN(int(stepsToMove))
