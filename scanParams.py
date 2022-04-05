@@ -1,5 +1,5 @@
 
-def param(SamplingF,mm,motorSpeed,yMM,yResolution):
+def calculateParameters(SamplingF,mm,motorSpeed,yMM,yResolution):
     
     yTotalSteps = yMM *200
     yIncrements = yMM/yResolution

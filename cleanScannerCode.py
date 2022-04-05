@@ -2,7 +2,7 @@
 import motorWrapper
 import PicoScopewithFFT as pico
 import FFTLinePixels as FFTLinePixels
-import psuedo
+import scanParams
 import threading
 import time
 thread_local = threading.local()
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     }
     
     
-    parameterDictionary["xStepRange"],parameterDictionary["bufferSize"],parameterDictionary["samplesPerPixel"],parameterDictionary["yIncrement"], parameterDictionary["nOfRows"] =  psuedo.param(parameterDictionary["samplingFrequency"],
+    parameterDictionary["xStepRange"],parameterDictionary["bufferSize"],parameterDictionary["samplesPerPixel"],parameterDictionary["yIncrement"], parameterDictionary["nOfRows"] =  scanParams.calculateParameters(parameterDictionary["samplingFrequency"],
                                                                                                                             parameterDictionary["mmMovedX"],
                                                                                                                             parameterDictionary["motorSpeed"],
                                                                                                                             parameterDictionary["mmMovedY"],
