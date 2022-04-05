@@ -1,6 +1,6 @@
 
-def param(SamplingF,mm):
-    motorSpeed = 400
+def param(SamplingF,mm,motorSpeed):
+    
     pulseDiv = 4 
     numerator = (16 * 10e6 * motorSpeed)
     denom = (2**pulseDiv)*2048*32
@@ -19,7 +19,7 @@ def param(SamplingF,mm):
 
     #coilFrequency = coilF
 
-    SamplingFrequency = SamplingF
+   
     
 #calculate min defect length
     # = samplesPerSecond * speed * 1e-3
@@ -30,8 +30,8 @@ def param(SamplingF,mm):
     numberofsteps = int(mm*200)  #return
     #print(f'mm moved is {mmMoved}')
     time = mmMoved/speed
-    #print(f'time is {time}')
-    NumberOfSamples = round(time * SamplingFrequency)  #return this value
+    #print(f'time is {time}, sampling frequency is {SamplingF}')
+    NumberOfSamples = round(time * SamplingF)  #return this value
     #print(f'Number Of samples is: {NumberOfSamples}')
     PixelsPerSample = NumberOfSamples/(mmMoved*(1/0.1))
     PixelsPerSample = round(PixelsPerSample) #return
@@ -43,6 +43,9 @@ def param(SamplingF,mm):
     #print(samplesPerPixel/PixelsPerSample)
     #mult = (50e-6)/MinDefectLength
     #print(mult)
+    print(numberofsteps)
+    print(NumberOfSamples)
+    print(PixelsPerSample)
     return numberofsteps, NumberOfSamples, PixelsPerSample
 
 
