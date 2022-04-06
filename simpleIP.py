@@ -30,7 +30,7 @@ def showImage(rows,columns,filename):
     # cv.waitKey(0)
     # cv.destroyAllWindows
     plt.imshow(resized,cmap='coolwarm')
-    plt.show()
+    plt.savefig('ScanOutput.png')
 
-
+]
 
