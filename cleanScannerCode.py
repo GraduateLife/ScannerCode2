@@ -1,5 +1,6 @@
 #imports
 import motorWrapper
+import fGenControl
 import PicoScopewithFFT as pico
 import FFTLinePixels as FFTLinePixels
 import scanParams
@@ -45,6 +46,8 @@ if __name__ == "__main__":
     parameterDictionary = {
     "coilFrequency" : 400e3,
     "sensorFrequency" : 30e3,
+    "coilAmplitude" : 2,
+    "sensorAmplitude":4,
     "samplingPeriod" :  picoSamplingPeriod,
     "samplingFrequency" : 1/(picoSamplingPeriod * picoTimebase),
     "motorSpeed" : 200,
@@ -60,7 +63,8 @@ if __name__ == "__main__":
     "filename" : now.strftime("%H%MFFTOutput.csv")
 
     }
-    
+    fGenControl.turnFgenOn(parameterDictionary["coilFrequency"],parameterDictionary["coilAmplitude"],
+                            parameterDictionary["sensorFrequency"],parameterDictionary["sensorAmplitude"])
     
     parameterDictionary["xStepRange"
     ],parameterDictionary["bufferSize"
@@ -100,6 +104,7 @@ if __name__ == "__main__":
     motorWrapper.moveX(0)
     motorWrapper.moveY(0)
     picoOb.ClosePico()
+    fGenControl.turnFgenOff()
     toc = time.perf_counter()
     print(f'Complete scan took {toc - tic:0.4f} seconds')
     simpleIP.showImage(parameterDictionary["filename"])

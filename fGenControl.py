@@ -13,8 +13,8 @@ def turnFgenOn(coilFrequency, coilAmplitude,sensorFrequency, sensorAmplitude):
     my_instrument.write(':SOUR1:VOLT:UNIT VRMS')
     my_instrument.write(':SOUR2:VOLT:UNIT VRMS')
 
-    my_instrument.write(f':SOUR1:APPL:SIN {coilFrequency}e3,{coilAmplitude},0,0')
-    my_instrument.write(f':SOUR2:APPL:SIN {sensorFrequency}e3,{sensorAmplitude},0,0')
+    my_instrument.write(f':SOUR1:APPL:SIN {coilFrequency},{coilAmplitude},0,0')
+    my_instrument.write(f':SOUR2:APPL:SIN {sensorFrequency},{sensorAmplitude},0,0')
     my_instrument.write(':OUTP1 ON')
     my_instrument.write(':OUTP2 ON')
     my_instrument.close()
