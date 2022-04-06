@@ -5,17 +5,18 @@ import matplotlib.pyplot as plt
 
 
 
-def showImage(rows,columns,filename):
+def showImage(filename):
+    
     img = pd.read_csv(filename)
     imgArray = np.asarray(img)
-    print(imgArray.shape)
+    rows, columns = imgArray.shape
     maxVal = np.max(imgArray)
     minVal = np.min(imgArray)
     print(maxVal)
     print(minVal)
     resized = np.zeros((rows,int(columns/10)))
     for row in range(rows):
-        for column in range(0,columns,10):
+        for column in range(0,int(columns),10):
             upperLimit = column +9
             PixelSum = np.sum(imgArray[row,column:upperLimit])
             PixelAverage = PixelSum/10
@@ -32,5 +33,5 @@ def showImage(rows,columns,filename):
     plt.imshow(resized,cmap='coolwarm')
     plt.savefig('ScanOutput.png')
 
-]
+
 

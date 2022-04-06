@@ -11,7 +11,7 @@ thread_local = threading.local()
 
 
 
-def Scan(nOfRows,BufferSize,xRange,yIncrement,fft,picoOb):
+def Scan(nOfRows,BufferSize,xRange,yIncrement,fft,picoOb,pixelsPerRow,filename):
     rowCounter = 0 
     for z in range(int(nOfRows/2)):
         
@@ -30,6 +30,7 @@ def Scan(nOfRows,BufferSize,xRange,yIncrement,fft,picoOb):
         #fftT1.start()
         motorWrapper.moveX(0)
         picoT2.join()
+        simpleIP.showImage(filename)
         #fftT1.join()
         motorWrapper.moveY(((2*yIncrement)*z)+(2*yIncrement))
 
@@ -43,13 +44,13 @@ if __name__ == "__main__":
     now = datetime.now()
     parameterDictionary = {
     "coilFrequency" : 400e3,
-    "sensorFrequency" : 33e3,
+    "sensorFrequency" : 30e3,
     "samplingPeriod" :  picoSamplingPeriod,
     "samplingFrequency" : 1/(picoSamplingPeriod * picoTimebase),
     "motorSpeed" : 200,
     "mmMovedX"   : 170,
-    "mmMovedY"   : 30,
-    "yResolutionMm"   : 1,
+    "mmMovedY"   : 60,
+    "yResolutionMm"   : 0.5,
     "xResolutionMm"   : 0.5,
     "captures"   : 1,
     "gain"       : 100,
@@ -95,13 +96,13 @@ if __name__ == "__main__":
     Scan(parameterDictionary["nOfRows"],
         parameterDictionary["bufferSize"],
         parameterDictionary["xStepRange"],
-        parameterDictionary["yIncrement"],fft,picoOb)
+        parameterDictionary["yIncrement"],fft,picoOb,parameterDictionary["pixelsPerRow"],parameterDictionary["filename"])
     motorWrapper.moveX(0)
     motorWrapper.moveY(0)
     picoOb.ClosePico()
     toc = time.perf_counter()
     print(f'Complete scan took {toc - tic:0.4f} seconds')
-    simpleIP.showImage(parameterDictionary["mmMovedY"],parameterDictionary["pixelsPerRow"],parameterDictionary["filename"])
+    simpleIP.showImage(parameterDictionary["filename"])
 
 
 
