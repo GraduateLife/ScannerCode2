@@ -5,6 +5,8 @@ import FFTLinePixels as FFTLinePixels
 import scanParams
 import threading
 import time
+from datetime import datetime
+import simpleIP
 thread_local = threading.local()
 
 
@@ -38,6 +40,7 @@ if __name__ == "__main__":
     #a dictionary of scanning parameters is absolutely necessary
     picoSamplingPeriod = 512
     picoTimebase = 1e-9
+    now = datetime.now()
     parameterDictionary = {
     "coilFrequency" : 400e3,
     "sensorFrequency" : 33e3,
@@ -52,19 +55,27 @@ if __name__ == "__main__":
     "gain"       : 100,
     "PicoResolution" : "PS5000A_DR_16BIT",
     "PicoVoltageRange" : "PS5000A_5V",
-    "PicoTimeBase": "PS5000A_NS"
+    "PicoTimeBase": "PS5000A_NS",
+    "filename" : now.strftime("%H%MFFTOutput.csv")
 
     }
     
     
-    parameterDictionary["xStepRange"],parameterDictionary["bufferSize"],parameterDictionary["samplesPerPixel"],parameterDictionary["yIncrement"], parameterDictionary["nOfRows"] =  scanParams.calculateParameters(parameterDictionary["samplingFrequency"],
-                                                                                                                            parameterDictionary["mmMovedX"],
-                                                                                                                            parameterDictionary["motorSpeed"],
-                                                                                                                            parameterDictionary["mmMovedY"],
-                                                                                                                            parameterDictionary["yResolutionMm"])
+    parameterDictionary["xStepRange"
+    ],parameterDictionary["bufferSize"
+    ],parameterDictionary["samplesPerPixel"
+    ],parameterDictionary["yIncrement"
+    ], parameterDictionary["nOfRows"] =  scanParams.calculateParameters(parameterDictionary["samplingFrequency"],
+                                                                                            parameterDictionary["mmMovedX"],
+                                                                                            parameterDictionary["motorSpeed"],
+                                                                                            parameterDictionary["mmMovedY"],
+                                                                                            parameterDictionary["yResolutionMm"])
 
-    
-    fft = FFTLinePixels.FFTLine(parameterDictionary["samplesPerPixel"],
+    print(parameterDictionary)
+    parameterDictionary["pixelsPerRow"] = parameterDictionary['bufferSize']/parameterDictionary['samplesPerPixel']
+    print(parameterDictionary)
+    fft = FFTLinePixels.FFTLine(parameterDictionary["filename"],
+                                parameterDictionary["samplesPerPixel"],
                                 parameterDictionary["coilFrequency"],
                                 parameterDictionary["sensorFrequency"],
                                 parameterDictionary["samplingFrequency"],
@@ -90,6 +101,7 @@ if __name__ == "__main__":
     picoOb.ClosePico()
     toc = time.perf_counter()
     print(f'Complete scan took {toc - tic:0.4f} seconds')
+    simpleIP.showImage(parameterDictionary["mmMovedY"],parameterDictionary["pixelsPerRow"],parameterDictionary["filename"])
 
 
 
