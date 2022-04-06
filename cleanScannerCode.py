@@ -43,7 +43,7 @@ if __name__ == "__main__":
     "sensorFrequency" : 33e3,
     "samplingPeriod" :  picoSamplingPeriod,
     "samplingFrequency" : 1/(picoSamplingPeriod * picoTimebase),
-    "motorSpeed" : 400,
+    "motorSpeed" : 200,
     "mmMovedX"   : 170,
     "mmMovedY"   : 30,
     "yResolutionMm"   : 1,
