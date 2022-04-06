@@ -15,7 +15,7 @@ import heapq as hp
 filewrite = ctypes.CDLL('./fileio.dll')
 
 class FFTLine:
-    def __init__(self,SamplesPerPixel,CoilFrequency,SensorFrequency,SampleFrequency,Gain):
+    def __init__(self,filename,SamplesPerPixel,CoilFrequency,SensorFrequency,SampleFrequency,Gain):
         now = datetime.now()
         self.FFTOutFile = now.strftime("%H%MFFTOutput.csv")
         self.SamplesPerPixel = SamplesPerPixel
