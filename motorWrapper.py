@@ -70,7 +70,7 @@ def MotorStartup(speed):
 
 
 def moveX(stepsToMove):
-    motordll.XAxismoveToPositionN(stepsToMove)
+    motordll.XAxismoveToPositionN(int(stepsToMove))
 
 def moveY(stepsToMove):
     motordll.YAxismoveToPositionN(int(stepsToMove))

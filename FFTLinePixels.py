@@ -63,9 +63,11 @@ class FFTLine:
             #plt.ylabel('Voltage (V)')
         
             freq=rfftfreq(len(val),d=dt)
-        
-            #plt.plot(freq,FFTLineabs)
-            #plt.show()
+            # FFTOutput = zip(freq,FFTLineabs)
+            # FFTDF = pd.DataFrame(FFTOutput)
+            # FFTDF.to_csv('preFilterFFT.csv')
+            # plt.plot(freq,FFTLineabs)
+            # plt.savefig('preFilterFFT.jpg')
 
             points_per_freq = len(FFTLineabs) / (self.SampleFrequency / 2)
             CoilFreq = int(points_per_freq * self.CoilFrequency)
@@ -75,9 +77,15 @@ class FFTLine:
             FFTLineabs[CoilFreq - 40 : CoilFreq + 40] = 0 ##Set Freq bin of Coil to 0
             FFTLineabs[SensorBias - 50 : SensorBias + 50] = 0
             FFTLineabs[upperBandCutoff +1: 10000000] = 0 ##Set Sensor Biasing Freq bin to 0
-            FFTLineabs[0 :  lowerBandCutoff-1] = 0 ##Set DC Freq bin to 0
-            #plt.plot(freq,FFTLineabs)
-            #plt.show()
+            FFTLineabs[0 :  lowerBandCutoff-1] = 0
+            
+            # FFTOutput = zip(freq,FFTLineabs)
+            # FFTDF = pd.DataFrame(FFTOutput)
+            # FFTDF.to_csv('postFilterFFT.csv')
+
+             ##Set DC Freq bin to 0
+            # plt.plot(freq,FFTLineabs)
+            # plt.savefig('postFilterFFT.jpg')
             #FFTLineabs[counter] = abs(FFTPixel)
             #FFTs = hp.nlargest(2,FFTLineabs)
             #FFTout = np.sum(FFTs)
@@ -89,11 +97,11 @@ class FFTLine:
         aver = sum /(len(FFTLinemax))
         
         for i in range(len(FFTLinemax)):
-           # FFTLinemax[i] = FFTLinemax[i] - (0.5*aver)
+            FFTLinemax[i] = FFTLinemax[i] - (aver)
             if FFTLinemax[i]<(0):
                 FFTLinemax[i]= 0
             else:
-                FFTLinemax[i]=FFTLinemax[i]
+                FFTLinemax[i]=np.abs(FFTLinemax[i])
             #FFTLinemax[i] = FFTLinemax[i]*(255/(np.amax(FFTLinemax)-np.amin(FFTLinemax)))
         print (aver)
         
