@@ -13,27 +13,18 @@ thread_local = threading.local()
 
 
 def Scan(nOfRows,BufferSize,xRange,yIncrement,fft,picoOb,pixelsPerRow,filename):
-    rowCounter = 0 
-    for z in range(int(nOfRows/2)):
-        
-        picoT1 = threading.Thread(target=picoOb.GetVal,args=(BufferSize,rowCounter,fft))
-        print(f'writing to row {rowCounter}')
-        #fftT1 = threading.Thread(target=fft.FFTData,args=(rowCounter,))
-        rowCounter += 1
-        picoT2 = threading.Thread(target=picoOb.GetVal,args=(BufferSize,rowCounter,fft))
-        print(f'writing to row {rowCounter}')
-        rowCounter += 1
+    for row in range(nOfRows)):
+        picoT1 = threading.Thread(target=picoOb.GetVal,args=(BufferSize,row,fft))
+        print(f'writing to row {row}')
         picoT1.start()
-        motorWrapper.moveX(xRange)
+        if z % 2 == 0:
+            motorWrapper.moveX(xRange)
+        else:
+            motorWrapper.moveX(0)
         picoT1.join()
-        motorWrapper.moveY(((2*yIncrement)*z)+yIncrement)
-        picoT2.start()
-        #fftT1.start()
-        motorWrapper.moveX(0)
-        picoT2.join()
-        simpleIP.showImage(filename)
-        #fftT1.join()
-        motorWrapper.moveY(((2*yIncrement)*z)+(2*yIncrement))
+        if row > 2:
+            simpleIP.showImage(filename)
+        motorWrapper.moveY((yIncrement*row)+yIncrement)
 
 
 if __name__ == "__main__":
