@@ -13,11 +13,11 @@ thread_local = threading.local()
 
 
 def Scan(nOfRows,BufferSize,xRange,yIncrement,fft,picoOb,pixelsPerRow,filename):
-    for row in range(nOfRows)):
+    for row in range(int(nOfRows)):
         picoT1 = threading.Thread(target=picoOb.GetVal,args=(BufferSize,row,fft))
         print(f'writing to row {row}')
         picoT1.start()
-        if z % 2 == 0:
+        if row % 2 == 0:
             motorWrapper.moveX(xRange)
         else:
             motorWrapper.moveX(0)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parameterDictionary = {
     "coilFrequency" : 900e3,
     "sensorFrequency" : 55e3,
-    "coilAmplitude" : 3.3,
+    "coilAmplitude" : 3.7,
     "sensorAmplitude":4,
     "samplingPeriod" :  picoSamplingPeriod,
     "samplingFrequency" : 1/(picoSamplingPeriod * picoTimebase),
