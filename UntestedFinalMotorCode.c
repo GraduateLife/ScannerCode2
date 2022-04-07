@@ -124,6 +124,7 @@ int checkMotorPower(){
 		return 0;
 	}
 	SendCmd(hComm,Address,TMCL_MVP,0x00,0x00,Position0);
+	GetResult(hComm,&Address,&Status,&Value1);
 	SendCmd(hComm2,Address,TMCL_MVP,0x00,0x00,Position1);
 	GetResult(hComm2,&Address,&Status,&Value2);
 	if(Status == 6){
@@ -133,6 +134,7 @@ int checkMotorPower(){
 		return 0;
 	}
 	SendCmd(hComm2,Address,TMCL_MVP,0x00,0x00,Position0);
+	GetResult(hComm2,&Address,&Status,&Value2);
 	SendCmd(hComm3,Address,TMCL_MVP,0x00,0x00,Position1);
 	GetResult(hComm3,&Address,&Status,&Value3);
 	if(Status == 6){
@@ -142,6 +144,7 @@ int checkMotorPower(){
 		return 0;
 	}
 	SendCmd(hComm3,Address,TMCL_MVP,0x00,0x00,Position0);
+	GetResult(hComm3,&Address,&Status,&Value3);
 	return 1;
 
 }
@@ -362,7 +365,7 @@ int XAxismoveToPositionN(INT Position){
 	if(Status == 6){
 		printf("Issue with motor power, do not proceed \n");
 		return 0;
-	
+	}
 	
 	SendCmd(hComm3,Address,TMCL_GAP,0x08,0x00,0);
 	GetResult(hComm3,&Address,&Status,&Value);

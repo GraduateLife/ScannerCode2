@@ -88,6 +88,7 @@ if __name__ == "__main__":
     
 
     motorWrapper.MotorStartup(parameterDictionary["motorSpeed"])
+    motorWrapper.checkMotorPower()
     print(parameterDictionary)
     Scan(parameterDictionary["nOfRows"],
         parameterDictionary["bufferSize"],
