@@ -54,8 +54,9 @@ if __name__ == "__main__":
     "filename" : now.strftime("%H%MFFTOutput.csv")
 
     }
-    fGenControl.turnFgenOn(parameterDictionary["coilFrequency"],parameterDictionary["coilAmplitude"],
+    fGenControl.setFgenParams(parameterDictionary["coilFrequency"],parameterDictionary["coilAmplitude"],
                             parameterDictionary["sensorFrequency"],parameterDictionary["sensorAmplitude"])
+    fGenControl.turnFgenOn()
     
     parameterDictionary["xStepRange"
     ],parameterDictionary["bufferSize"
