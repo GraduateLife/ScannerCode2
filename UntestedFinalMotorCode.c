@@ -66,7 +66,7 @@ UCHAR GetResult(HANDLE Handle, UCHAR *Address, UCHAR *Status, INT *Value);
 void openhComm(char comstring[]);
 void openhComm2(char comstring[]);
 void openhComm3(char comstring[]);
-void checkMotorPower();
+__declspec(dllexport)void checkMotorPower();
 __declspec(dllexport)int YAxismoveToPositionN(INT Position);
 __declspec(dllexport)int XAxismoveToPositionN(INT Position);
 __declspec(dllexport)void openSerialPorts(char comString1[],char comstring2[],char comstring3[]);
@@ -113,6 +113,7 @@ void checkMotorPower(){
 	INT Value2 = 0;
 	INT Value3 = 0;
 	INT Position1 = 1;
+	INT Position0 = 0;
 	printf("Moving to position %d \n",Position1);
 	SendCmd(hComm,Address,TMCL_MVP,0x00,0x00,Position1);
 	GetResult(hComm,&Address,&Status,&Value1);
@@ -121,6 +122,7 @@ void checkMotorPower(){
 		GetResult(hComm,&Address,&Status,&Value1);
 		printf("Issue with motor power on motor id %d, do not proceed \n",Value1);
 	}
+	SendCmd(hComm,Address,TMCL_MVP,0x00,0x00,Position0);
 	SendCmd(hComm2,Address,TMCL_MVP,0x00,0x00,Position1);
 	GetResult(hComm2,&Address,&Status,&Value2);
 	if(Status == 6){
@@ -128,13 +130,16 @@ void checkMotorPower(){
 		GetResult(hComm,&Address,&Status,&Value2);
 		printf("Issue with motor power on motor id %d, do not proceed \n",Value2);
 	}
+	SendCmd(hComm2,Address,TMCL_MVP,0x00,0x00,Position0);
 	SendCmd(hComm3,Address,TMCL_MVP,0x00,0x00,Position1);
 	GetResult(hComm3,&Address,&Status,&Value3);
 	if(Status == 6){
 		SendCmd(hComm,Address,TMCL_GGP,0x42,0x00,0);
 		GetResult(hComm,&Address,&Status,&Value3);
-		printf("Issue with motor power on motor id %d, do not proceed \n",Value2);
+		printf("Issue with motor power on motor id %d, do not proceed \n",Value3);
 	}
+	SendCmd(hComm3,Address,TMCL_MVP,0x00,0x00,Position0);
+
 }
 
 

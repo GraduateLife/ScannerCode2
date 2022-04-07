@@ -74,3 +74,7 @@ def moveX(stepsToMove):
 
 def moveY(stepsToMove):
     motordll.YAxismoveToPositionN(int(stepsToMove))
+
+
+def checkMotorPower():
+    motordll.checkMotorPower()
