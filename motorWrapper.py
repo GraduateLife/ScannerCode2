@@ -77,4 +77,7 @@ def moveY(stepsToMove):
 
 
 def checkMotorPower():
-    motordll.checkMotorPower()
+    checkMotors = motordll.checkMotorPower(speed)
+    
+    if checkMotors != 1:
+        raise Exception ("Motor Failure")
