@@ -31,25 +31,25 @@ if __name__ == "__main__":
     tic = time.perf_counter()
     #first, set scanning parameters
     #a dictionary of scanning parameters is absolutely necessary
-    picoSamplingPeriod = 512
+    picoSamplingPeriod = 256
     picoTimebase = 1e-9
     now = datetime.now()
     parameterDictionary = {
-    "coilFrequency" : 400e3,
-    "sensorFrequency" : 30e3,
-    "coilAmplitude" : 2,
+    "coilFrequency" : 900e3,
+    "sensorFrequency" : 55e3,
+    "coilAmplitude" : 3.3,
     "sensorAmplitude":4,
     "samplingPeriod" :  picoSamplingPeriod,
     "samplingFrequency" : 1/(picoSamplingPeriod * picoTimebase),
     "motorSpeed" : 200,
     "mmMovedX"   : 170,
-    "mmMovedY"   : 60,
+    "mmMovedY"   : 20,
     "yResolutionMm"   : 0.5,
     "xResolutionMm"   : 0.5,
     "captures"   : 1,
-    "gain"       : 100,
+    "gain"       : 1000,
     "PicoResolution" : "PS5000A_DR_16BIT",
-    "PicoVoltageRange" : "PS5000A_5V",
+    "PicoVoltageRange" : "PS5000A_10V",
     "PicoTimeBase": "PS5000A_NS",
     "filename" : now.strftime("%H%MFFTOutput.csv")
 
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     fGenControl.turnFgenOff()
     toc = time.perf_counter()
     print(f'Complete scan took {toc - tic:0.4f} seconds')
-    simpleIP.showImage(parameterDictionary["filename"])
+    #simpleIP.showImage(parameterDictionary["filename"])
 
 
 

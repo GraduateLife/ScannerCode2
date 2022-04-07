@@ -9,20 +9,21 @@ def showImage(filename):
     
     img = pd.read_csv(filename)
     imgArray = np.asarray(img)
+    print(imgArray.shape)
     rows, columns = imgArray.shape
     maxVal = np.max(imgArray)
     minVal = np.min(imgArray)
     print(maxVal)
     print(minVal)
-    resized = np.zeros((rows,int(columns/10)))
+    resized = np.zeros((rows,int(columns/20)))
     for row in range(rows):
-        for column in range(0,int(columns),10):
+        for column in range(0,int(columns),20):
             upperLimit = column +9
             PixelSum = np.sum(imgArray[row,column:upperLimit])
-            PixelAverage = PixelSum/10
+            PixelAverage = PixelSum/20
             normalised = (PixelAverage-minVal)/(maxVal-minVal)
             finalValue = normalised
-            resized[row,int(column/10)] = finalValue
+            resized[row,int(column/20)] = finalValue
             #print(f'Value in array is {imgArray[row,column]}')
 
 
