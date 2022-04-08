@@ -11,11 +11,16 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import cleanScannerCode as scanner
 from datetime import datetime
+import time 
+import threading
 now = datetime.now()
 
 global cf,xres,xsize,sf,ysize,yres,ms
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
+        self.scan = scanner.scannerControl()
+        self.scanStart = 2
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(2042, 743)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -121,9 +126,9 @@ class Ui_MainWindow(object):
         self.label_152.setObjectName("label_152")
         self.horizontalSliderFan1 = QtWidgets.QSlider(self.groupBoxFan1)
         self.horizontalSliderFan1.setGeometry(QtCore.QRect(10, 30, 191, 31))
-        self.horizontalSliderFan1.setMaximum(100)
-        self.horizontalSliderFan1.setSingleStep(1)
-        self.horizontalSliderFan1.setPageStep(5)
+        self.horizontalSliderFan1.setMaximum(1000)
+        self.horizontalSliderFan1.setSingleStep(100)
+        self.horizontalSliderFan1.setPageStep(300)
         self.horizontalSliderFan1.setProperty("value", 0)
         self.horizontalSliderFan1.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSliderFan1.setTickPosition(QtWidgets.QSlider.NoTicks)
@@ -137,7 +142,7 @@ class Ui_MainWindow(object):
         font.setWeight(50)
         self.lcdNumberFan1.setFont(font)
         self.lcdNumberFan1.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.lcdNumberFan1.setDigitCount(3)
+        self.lcdNumberFan1.setDigitCount(4)
         self.lcdNumberFan1.setProperty("value", 0.0)
         self.lcdNumberFan1.setProperty("intValue", 0)
         self.lcdNumberFan1.setObjectName("lcdNumberFan1")
@@ -157,9 +162,9 @@ class Ui_MainWindow(object):
         self.label_153.setObjectName("label_153")
         self.horizontalSliderFan2 = QtWidgets.QSlider(self.groupBoxFan2)
         self.horizontalSliderFan2.setGeometry(QtCore.QRect(10, 30, 191, 31))
-        self.horizontalSliderFan2.setMaximum(100)
+        self.horizontalSliderFan2.setMaximum(300)
         self.horizontalSliderFan2.setSingleStep(1)
-        self.horizontalSliderFan2.setPageStep(5)
+        self.horizontalSliderFan2.setPageStep(1)
         self.horizontalSliderFan2.setProperty("value", 0)
         self.horizontalSliderFan2.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSliderFan2.setObjectName("horizontalSliderFan2")
@@ -191,9 +196,9 @@ class Ui_MainWindow(object):
         self.label_154.setObjectName("label_154")
         self.horizontalSliderFan3 = QtWidgets.QSlider(self.groupBoxFan3)
         self.horizontalSliderFan3.setGeometry(QtCore.QRect(10, 30, 191, 31))
-        self.horizontalSliderFan3.setMaximum(100)
-        self.horizontalSliderFan3.setSingleStep(1)
-        self.horizontalSliderFan3.setPageStep(5)
+        self.horizontalSliderFan3.setMaximum(2)
+        self.horizontalSliderFan3.setSingleStep(0.5)
+        self.horizontalSliderFan3.setPageStep(1)
         self.horizontalSliderFan3.setProperty("value", 0)
         self.horizontalSliderFan3.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSliderFan3.setObjectName("horizontalSliderFan3")
@@ -207,7 +212,7 @@ class Ui_MainWindow(object):
         self.lcdNumberFan3.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.lcdNumberFan3.setDigitCount(3)
         self.lcdNumberFan3.setProperty("value", 0.0)
-        self.lcdNumberFan3.setProperty("intValue", 0)
+ 
         self.lcdNumberFan3.setObjectName("lcdNumberFan3")
         self.groupBoxFan4 = QtWidgets.QGroupBox(self.groupBoxFanControl)
         self.groupBoxFan4.setGeometry(QtCore.QRect(350, 110, 301, 81))
@@ -259,9 +264,9 @@ class Ui_MainWindow(object):
         self.label_159.setObjectName("label_159")
         self.horizontalSliderFan6 = QtWidgets.QSlider(self.groupBoxFan6)
         self.horizontalSliderFan6.setGeometry(QtCore.QRect(10, 30, 181, 31))
-        self.horizontalSliderFan6.setMaximum(100)
-        self.horizontalSliderFan6.setSingleStep(1)
-        self.horizontalSliderFan6.setPageStep(5)
+        self.horizontalSliderFan6.setMaximum(2)
+        self.horizontalSliderFan6.setSingleStep(0.5)
+        self.horizontalSliderFan6.setPageStep(1)
         self.horizontalSliderFan6.setProperty("value", 0)
         self.horizontalSliderFan6.setOrientation(QtCore.Qt.Horizontal)
         self.horizontalSliderFan6.setObjectName("horizontalSliderFan6")
@@ -275,7 +280,7 @@ class Ui_MainWindow(object):
         self.lcdNumberFan6.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.lcdNumberFan6.setDigitCount(3)
         self.lcdNumberFan6.setProperty("value", 0.0)
-        self.lcdNumberFan6.setProperty("intValue", 0)
+        
         self.lcdNumberFan6.setObjectName("lcdNumberFan6")
         self.groupBoxFan5 = QtWidgets.QGroupBox(self.groupBoxFanControl)
         self.groupBoxFan5.setGeometry(QtCore.QRect(350, 200, 301, 81))
@@ -293,7 +298,7 @@ class Ui_MainWindow(object):
         self.label_160.setObjectName("label_160")
         self.horizontalSliderFan5 = QtWidgets.QSlider(self.groupBoxFan5)
         self.horizontalSliderFan5.setGeometry(QtCore.QRect(10, 30, 181, 31))
-        self.horizontalSliderFan5.setMaximum(100)
+        self.horizontalSliderFan5.setMaximum(300)
         self.horizontalSliderFan5.setSingleStep(1)
         self.horizontalSliderFan5.setPageStep(5)
         self.horizontalSliderFan5.setProperty("value", 0)
@@ -323,7 +328,7 @@ class Ui_MainWindow(object):
         self.horizontalSliderFan7 = QtWidgets.QSlider(self.groupBoxSimulateTemperatures)
         self.horizontalSliderFan7.setGeometry(QtCore.QRect(10, 30, 181, 31))
         self.horizontalSliderFan7.setMaximum(100)
-        self.horizontalSliderFan7.setSingleStep(1)
+        self.horizontalSliderFan7.setSingleStep(5)
         self.horizontalSliderFan7.setPageStep(5)
         self.horizontalSliderFan7.setProperty("value", 0)
         self.horizontalSliderFan7.setOrientation(QtCore.Qt.Horizontal)
@@ -650,7 +655,7 @@ class Ui_MainWindow(object):
         self.checkBox.clicked.connect(self.getparams)
         self.progressBar = QtWidgets.QProgressBar(self.groupBoxCurrentFanStatus_2)
         self.progressBar.setGeometry(QtCore.QRect(20, 270, 251, 51))
-        self.progressBar.setProperty("value", 24)
+        self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.label = QtWidgets.QLabel(self.groupBoxCurrentFanStatus_2)
         self.label.setGeometry(QtCore.QRect(20, 250, 191, 16))
@@ -765,30 +770,21 @@ class Ui_MainWindow(object):
 
     def checkauto(self):
         if self.radioButtonAutomatic.isChecked():
-            self.horizontalSliderFan1.setValue(50)
-            self.horizontalSliderFan2.setValue(50)
-            self.horizontalSliderFan3.setValue(50)
-            self.horizontalSliderFan4.setValue(50)
-            self.horizontalSliderFan5.setValue(50)
-            self.horizontalSliderFan6.setValue(50)
-            self.horizontalSliderFan7.setValue(50)
+            self.horizontalSliderFan1.setValue(400)
+            self.horizontalSliderFan2.setValue(170)
+            self.horizontalSliderFan3.setValue(0.5)
+            self.horizontalSliderFan4.setValue(33)
+            self.horizontalSliderFan5.setValue(30)
+            self.horizontalSliderFan6.setValue(0.5)
+            self.horizontalSliderFan7.setValue(10)
     
     def getparams(self):
         if self.checkBox.isChecked():
-            cf =  self.lcdNumberFan1.value()
-            xsize = self.lcdNumberFan2.value()
-            xres = self.lcdNumberFan3.value()
-            sf = self.lcdNumberFan4.value()
-            ysize = self.lcdNumberFan5.value() 
-            yres = self.lcdNumberFan6.value()
-            ms = self.lcdNumberFan7.value()
-
-    def startscan(self):
-        picoSamplingPeriod = 256
-        picoTimebase = 1e-9
-        parameterDictionary = {
-    "coilFrequency" : self.lcdNumberFan1.value(),
-    "sensorFrequency" : self.lcdNumberFan4.value(),
+            picoSamplingPeriod = 256
+            picoTimebase = 1e-9
+            parameterDictionary = {
+    "coilFrequency" : self.lcdNumberFan1.value()*1e3,
+    "sensorFrequency" : self.lcdNumberFan4.value()*1e3,
     "coilAmplitude" : 3.7,
     "sensorAmplitude":4,
     "samplingPeriod" :  picoSamplingPeriod,
@@ -804,16 +800,41 @@ class Ui_MainWindow(object):
     "PicoVoltageRange" : "PS5000A_10V",
     "PicoTimeBase": "PS5000A_NS",
     "filename" : now.strftime("%H%MFFTOutput.csv")
-        }
-        self.scan = scanner.scannerControl(parameterDictionary)
-        self.sc
+            }
+            
+            self.scan.setScanParams(parameterDictionary)
+            self.scanStart = 0 
+            
+
+    def startscan(self):
+        
+        self.scan.Scan()
+        self.OutImage.setPixmap(QtGui.QPixmap("ScanOutput.png"))
+        # self.scanStart = 1
+        # t1 = threading.Thread(target=self.updateScan)
+        # t1.start()
+    # def isScanStart(self):
+    #     return self.scanStart
+
+    # def updateScan(self):
+    #     tic = time.perf_counter()
+    #     if tic%5 ==0:
+    #         print('updating scanning parameter')
+    #         self.progressBar.setProperty("value", self.scan.scanPercentage())
+    #         self.OutImage.setPixmap(QtGui.QPixmap("ScanOutput.png"))
+        
+        
+
+
 
     def hardwarecheck(self):
-        self.labelStatusFan1.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
-        self.labelStatusFan2.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
-        self.labelStatusFan3.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
-        self.labelStatusFan4.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
-        self.labelStatusFan6.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
+        if self.scan.startMotors() == 0:
+            self.labelStatusFan1.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
+            self.labelStatusFan2.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
+            self.labelStatusFan3.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
+            self.labelStatusFan4.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
+            self.labelStatusFan6.setPixmap(QtGui.QPixmap(r"C:\Users\ollie\Downloads\icons\icons\green-led-on.png"))
+        
 
 
         
@@ -892,5 +913,15 @@ if __name__ == "__main__":
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
+
     MainWindow.show()
+    # tic = time.perf_counter()
+    # print('main reached this statement')
+    # while ui.isScanStart() == 2:
+    #     continue
+    # while ui.isScanStart() == 1:
+    #     if tic % 5 == 0:
+    #         ui.updateScan()
+
+
     sys.exit(app.exec_())

@@ -15,15 +15,21 @@ thread_local = threading.local()
 
 
 class scannerControl:
-    def __init__(self,parameterDictionary):
+    def startMotors(self):
+        motorWrapper.MotorStartup(200)
+        motorStatus = motorWrapper.checkMotorPower()
+        return motorStatus
+    def setScanParams(self,parameterDictionary):
     
     #these variables will need to be moved to the gui code
     
     
         self.parameterDictionary = parameterDictionary
+        print(parameterDictionary)
         fGenControl.setFgenParams(self.parameterDictionary["coilFrequency"],self.parameterDictionary["coilAmplitude"],
                                 self.parameterDictionary["sensorFrequency"],self.parameterDictionary["sensorAmplitude"])
         fGenControl.turnFgenOn()
+        motorWrapper.setXspeed(parameterDictionary["motorSpeed"])
         
         self.parameterDictionary["xStepRange"
         ],self.parameterDictionary["bufferSize"
@@ -61,9 +67,8 @@ class scannerControl:
     #simpleIP.showImage(parameterDictionary["filename"])
 
 
-    def MotorStartup(self):
-        motorWrapper.MotorStartup(100)
-        motorWrapper.checkMotorPower()
+
+        
 
 
     def endScan(self):
@@ -72,10 +77,22 @@ class scannerControl:
         self.picoOb.ClosePico()
         fGenControl.turnFgenOff()
 
+    def scanPercentage(self):
+        return (self.Row/self.parameterDictionary["nOfRows"])*100
+
+    def scanStatus(self):
+        if self.Row <= self.parameterDictionary["nOfRows"]:
+            return 0
+        else:
+            return 1
+        
+    
+
     def Scan(self):
-        motorWrapper.MotorStartup(self.parameterDictionary["motorSpeed"])
+        self.Row = 0
         tic = time.perf_counter()
         for row in range(int(self.parameterDictionary["nOfRows"])):
+            self.Row == row
             picoT1 = threading.Thread(target=self.picoOb.GetVal,args=(self.parameterDictionary["bufferSize"],row,self.fft))
             print(f'writing to row {row}')
             picoT1.start()

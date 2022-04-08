@@ -97,7 +97,7 @@ class FFTLine:
         aver = sum /(len(FFTLinemax))
         
         for i in range(len(FFTLinemax)):
-            FFTLinemax[i] = FFTLinemax[i] - (aver)
+           # FFTLinemax[i] = FFTLinemax[i] - (aver)
             if FFTLinemax[i]<(0):
                 FFTLinemax[i]= 0
             else:

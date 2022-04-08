@@ -61,13 +61,15 @@ def MotorStartup(speed):
 
     motordll.checkMotorAssignment()
     checkMotors = motordll.motorSetup(speed)
-    
     if checkMotors != 1:
         raise Exception ("Motor Failure")
+    
         
 
         
-
+def setXspeed(speed):
+    print(f'setting x speed to {speed}')
+    motordll.setXmotorSpeed(int(speed))
 
 def moveX(stepsToMove):
     motordll.XAxismoveToPositionN(int(stepsToMove))
@@ -80,4 +82,6 @@ def checkMotorPower():
     checkMotors = motordll.checkMotorPower()
     
     if checkMotors != 1:
-        raise Exception ("Motor Failure")
+        return 1
+    else:
+        return 0
