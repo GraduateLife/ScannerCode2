@@ -12,7 +12,7 @@ thread_local = threading.local()
 
 
 
-def Scan(nOfRows,BufferSize,xRange,yIncrement,fft,picoOb,pixelsPerRow,filename):
+:
 
 class scannerControl:
     def __init__(self,parameterDictionary):
