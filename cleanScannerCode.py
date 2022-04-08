@@ -62,7 +62,7 @@ class scannerControl:
 
 
     def MotorStartup(self):
-        motorWrapper.MotorStartup(self.parameterDictionary["motorSpeed"])
+        motorWrapper.MotorStartup(100)
         motorWrapper.checkMotorPower()
 
 
@@ -73,6 +73,7 @@ class scannerControl:
         fGenControl.turnFgenOff()
 
     def Scan(self):
+        motorWrapper.MotorStartup(self.parameterDictionary["motorSpeed"])
         tic = time.perf_counter()
         for row in range(int(self.parameterDictionary["nOfRows"])):
             picoT1 = threading.Thread(target=self.picoOb.GetVal,args=(self.parameterDictionary["bufferSize"],row,self.fft))
