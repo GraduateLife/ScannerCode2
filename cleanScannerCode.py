@@ -12,47 +12,46 @@ thread_local = threading.local()
 
 
 
-:
+
 
 class scannerControl:
     def __init__(self,parameterDictionary):
     
     #these variables will need to be moved to the gui code
-    picoSamplingPeriod = 256
-    picoTimebase = 1e-9
     
-    self.parameterDictionary = parameterDictionary
-    fGenControl.setFgenParams(self.parameterDictionary["coilFrequency"],self.parameterDictionary["coilAmplitude"],
-                            self.parameterDictionary["sensorFrequency"],self.parameterDictionary["sensorAmplitude"])
-    fGenControl.turnFgenOn()
     
-    self.parameterDictionary["xStepRange"
-    ],self.parameterDictionary["bufferSize"
-    ],self.parameterDictionary["samplesPerPixel"
-    ],self.parameterDictionary["yIncrement"
-    ], self.parameterDictionary["nOfRows"] =  scanParams.calculateParameters(self.parameterDictionary["samplingFrequency"],
-                                                                                            self.parameterDictionary["mmMovedX"],
-                                                                                            self.parameterDictionary["motorSpeed"],
-                                                                                            self.parameterDictionary["mmMovedY"],
-                                                                                            self.parameterDictionary["yResolutionMm"])
+        self.parameterDictionary = parameterDictionary
+        fGenControl.setFgenParams(self.parameterDictionary["coilFrequency"],self.parameterDictionary["coilAmplitude"],
+                                self.parameterDictionary["sensorFrequency"],self.parameterDictionary["sensorAmplitude"])
+        fGenControl.turnFgenOn()
+        
+        self.parameterDictionary["xStepRange"
+        ],self.parameterDictionary["bufferSize"
+        ],self.parameterDictionary["samplesPerPixel"
+        ],self.parameterDictionary["yIncrement"
+        ], self.parameterDictionary["nOfRows"] =  scanParams.calculateParameters(self.parameterDictionary["samplingFrequency"],
+                                                                                                self.parameterDictionary["mmMovedX"],
+                                                                                                self.parameterDictionary["motorSpeed"],
+                                                                                                self.parameterDictionary["mmMovedY"],
+                                                                                                self.parameterDictionary["yResolutionMm"])
 
-    print(self.parameterDictionary)
-    self.parameterDictionary["pixelsPerRow"] = self.parameterDictionary['bufferSize']/self.parameterDictionary['samplesPerPixel']
-    print(self.parameterDictionary)
-    self.fft = FFTLinePixels.FFTLine(self.parameterDictionary["filename"],
-                                self.parameterDictionary["samplesPerPixel"],
-                                self.parameterDictionary["coilFrequency"],
-                                self.parameterDictionary["sensorFrequency"],
-                                self.parameterDictionary["samplingFrequency"],
-                                self.parameterDictionary["gain"])
+        print(self.parameterDictionary)
+        self.parameterDictionary["pixelsPerRow"] = self.parameterDictionary['bufferSize']/self.parameterDictionary['samplesPerPixel']
+        print(self.parameterDictionary)
+        self.fft = FFTLinePixels.FFTLine(self.parameterDictionary["filename"],
+                                    self.parameterDictionary["samplesPerPixel"],
+                                    self.parameterDictionary["coilFrequency"],
+                                    self.parameterDictionary["sensorFrequency"],
+                                    self.parameterDictionary["samplingFrequency"],
+                                    self.parameterDictionary["gain"])
 
 
-    self.picoOb = pico.StreamData(self.parameterDictionary["PicoResolution"],
-                            self.parameterDictionary["PicoVoltageRange"],
-                            self.parameterDictionary["samplingPeriod"],
-                            self.parameterDictionary["PicoTimeBase"],
-                            self.parameterDictionary["bufferSize"],
-                            self.parameterDictionary["captures"])
+        self.picoOb = pico.StreamData(self.parameterDictionary["PicoResolution"],
+                                self.parameterDictionary["PicoVoltageRange"],
+                                self.parameterDictionary["samplingPeriod"],
+                                self.parameterDictionary["PicoTimeBase"],
+                                self.parameterDictionary["bufferSize"],
+                                self.parameterDictionary["captures"])
     
 
 
@@ -80,7 +79,7 @@ class scannerControl:
             print(f'writing to row {row}')
             picoT1.start()
             if row % 2 == 0:
-                motorWrapper.moveX(xRange)
+                motorWrapper.moveX(self.parameterDictionary["xStepRange"])
             else:
                 motorWrapper.moveX(0)
             picoT1.join()
