@@ -67,6 +67,7 @@ void openhComm(char comstring[]);
 void openhComm2(char comstring[]);
 void openhComm3(char comstring[]);
 __declspec(dllexport)int checkMotorPower();
+__declspec(dllexport)void setXmotorSpeed();
 __declspec(dllexport)int YAxismoveToPositionN(INT Position);
 __declspec(dllexport)int XAxismoveToPositionN(INT Position);
 __declspec(dllexport)void openSerialPorts(char comString1[],char comstring2[],char comstring3[]);
@@ -252,6 +253,15 @@ void openSerialPorts(char comstring1[],char comstring2[],char comstring3[]){
 	}
 	}
 	
+}
+
+void setXmotorSpeed(INT speed){
+	UCHAR Address = 0x01;
+ 	UCHAR Type, Motor,Status = 0x00;
+ 	INT Value = 0;
+	SendCmd(hComm3,Address,TMCL_SAP,0x04,0x00,speed);
+	GetResult(hComm3,&Address,&Status,&Value);
+
 }
 
 int motorSetup(INT motorSpeed){

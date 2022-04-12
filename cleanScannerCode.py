@@ -16,7 +16,7 @@ thread_local = threading.local()
 
 class scannerControl:
     def startMotors(self):
-        motorWrapper.MotorStartup(200)
+        motorWrapper.MotorStartup(100)
         motorStatus = motorWrapper.checkMotorPower()
         return motorStatus
     def setScanParams(self,parameterDictionary):

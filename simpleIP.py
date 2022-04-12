@@ -15,15 +15,15 @@ def showImage(filename):
     minVal = np.min(imgArray)
     print(maxVal)
     print(minVal)
-    resized = np.zeros((rows,int(columns/20)))
+    resized = np.zeros((rows,int(columns/10)))
     for row in range(rows):
-        for column in range(0,int(columns),20):
+        for column in range(0,int(columns),10):
             upperLimit = column +9
             PixelSum = np.sum(imgArray[row,column:upperLimit])
-            PixelAverage = PixelSum/20
+            PixelAverage = PixelSum/10
             normalised = (PixelAverage-minVal)/(maxVal-minVal)
             finalValue = normalised
-            resized[row,int(column/20)] = finalValue
+            resized[row,int(column/10)] = finalValue
             #print(f'Value in array is {imgArray[row,column]}')
 
 
@@ -31,7 +31,7 @@ def showImage(filename):
     # cv.imshow('Image',im_color)
     # cv.waitKey(0)
     # cv.destroyAllWindows
-    plt.imshow(resized,cmap='coolwarm')
+    plt.imshow(resized,cmap='Blues')
     plt.savefig('ScanOutput.png')
 
 

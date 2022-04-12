@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from scipy.fft import fft, fftfreq
 from scipy.fft import rfft, rfftfreq
 from scipy.fft import irfft
+from scipy.stats import iqr
 import csv
 from scipy.signal import butter, lfilter
 import os
@@ -95,15 +96,31 @@ class FFTLine:
             FFTLinemax.append(FFTout) #add largest absolute values to array
         
         aver = sum /(len(FFTLinemax))
+
+        #added some code to remove outliers
         
+
+        Q1 = np.quantile(FFTLinemax,0.25)
+        Q3 = np.quantile(FFTLinemax,0.75)
+        IQR = Q3 - Q1
+        low = Q1 - 1.5*IQR
+        up = Q3 + 1.5*IQR
+
         for i in range(len(FFTLinemax)):
-           # FFTLinemax[i] = FFTLinemax[i] - (aver)
-            if FFTLinemax[i]<(0):
-                FFTLinemax[i]= 0
+            #FFTLinemax[i] = FFTLinemax[i] - (aver)
+            if FFTLinemax[i]>up or FFTLinemax[i]<low:
+                FFTLinemax[i] = aver
+            
+            # elif FFTLinemax[i]<(0):
+            #     FFTLinemax[i]= 0
             else:
-                FFTLinemax[i]=np.abs(FFTLinemax[i])
+               # FFTLinemax[i]=np.abs(FFTLinemax[i])
+                FFTLinemax[i]=FFTLinemax[i]
+
             #FFTLinemax[i] = FFTLinemax[i]*(255/(np.amax(FFTLinemax)-np.amin(FFTLinemax)))
         print (aver)
+        print(up)
+        print(low)
         
         aver = 0
         sum = 0

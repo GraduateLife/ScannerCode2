@@ -62,6 +62,7 @@ def MotorStartup(speed):
     motordll.checkMotorAssignment()
     checkMotors = motordll.motorSetup(speed)
     if checkMotors != 1:
+        
         raise Exception ("Motor Failure")
     
         
