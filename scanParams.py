@@ -1,13 +1,13 @@
 
-def calculateParameters(SamplingF,mm,motorSpeed,yMM,yResolution):
-    
-    yTotalSteps = yMM *200
-    yIncrements = yMM/yResolution
+def calculateParameters(parameterDictionary):
+    samplingFrequency = 1/(parameterDictionary["samplingPeriod"] * parameterDictionary["picoTimebase"])
+    yTotalSteps = parameterDictionary["mmMovedY"] *200
+    yIncrements =  parameterDictionary["mmMovedY"]/parameterDictionary["yResolutionMm"]
     yStepIncrement = yTotalSteps/yIncrements
 
 
     pulseDiv = 4 
-    numerator = (16 * 10e6 * motorSpeed)
+    numerator = (16 * 10e6 * parameterDictionary["motorSpeed"])
     denom = (2**pulseDiv)*2048*32
     vpps = (numerator/denom)/10
 
@@ -31,17 +31,17 @@ def calculateParameters(SamplingF,mm,motorSpeed,yMM,yResolution):
 
     #print(f'Min defect length is {MinDefectLength}')
     #numberofsteps = 35500
-    mmMoved = mm
-    numberofsteps = int(mm*200)  #return
+   
+    numberofsteps = int(parameterDictionary["mmMovedX"]*200)  #return
     #print(f'mm moved is {mmMoved}')
-    time = mmMoved/speed
+    time =parameterDictionary["mmMovedX"]/speed
     #print(f'time is {time}, sampling frequency is {SamplingF}')
-    NumberOfSamples = round(time * SamplingF)  #return this value
+    NumberOfSamples = round(time * samplingFrequency)  #return this value
     #print(f'Number Of samples is: {NumberOfSamples}')
-    PixelsPerSample = NumberOfSamples/(mmMoved*(1/0.1))
+    PixelsPerSample = NumberOfSamples/(parameterDictionary["mmMovedX"]*(1/parameterDictionary['xResolutionMm']))
     PixelsPerSample = round(PixelsPerSample) #return
-    desiredResolution = 0.5
-    numberOfPixels = mmMoved/desiredResolution
+    
+
     #print(f'Omri\'s samples per pixel: {PixelsPerSample}')
     #samplesPerPixel = NumberOfSamples/numberOfPixels
     #print(f'My samples per pixel {samplesPerPixel}')
@@ -51,7 +51,7 @@ def calculateParameters(SamplingF,mm,motorSpeed,yMM,yResolution):
     print(numberofsteps)
     print(NumberOfSamples)
     print(PixelsPerSample)
-    return numberofsteps, NumberOfSamples, PixelsPerSample, yStepIncrement, yIncrements
+    return numberofsteps, NumberOfSamples, PixelsPerSample, yStepIncrement, yIncrements,samplingFrequency
 
 
 

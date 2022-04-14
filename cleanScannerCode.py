@@ -8,6 +8,7 @@ import threading
 import time
 from datetime import datetime
 import simpleIP
+#import contour
 thread_local = threading.local()
 
 
@@ -35,11 +36,8 @@ class scannerControl:
         ],self.parameterDictionary["bufferSize"
         ],self.parameterDictionary["samplesPerPixel"
         ],self.parameterDictionary["yIncrement"
-        ], self.parameterDictionary["nOfRows"] =  scanParams.calculateParameters(self.parameterDictionary["samplingFrequency"],
-                                                                                                self.parameterDictionary["mmMovedX"],
-                                                                                                self.parameterDictionary["motorSpeed"],
-                                                                                                self.parameterDictionary["mmMovedY"],
-                                                                                                self.parameterDictionary["yResolutionMm"])
+        ], self.parameterDictionary["nOfRows"
+        ], self.parameterDictionary["samplingFrequency"] =  scanParams.calculateParameters(self.parameterDictionary)
 
         print(self.parameterDictionary)
         self.parameterDictionary["pixelsPerRow"] = self.parameterDictionary['bufferSize']/self.parameterDictionary['samplesPerPixel']
@@ -72,10 +70,11 @@ class scannerControl:
 
 
     def endScan(self):
+        motorWrapper.setXspeed(500)
         motorWrapper.moveX(0)
         motorWrapper.moveY(0)
         self.picoOb.ClosePico()
-        fGenControl.turnFgenOff()
+        #fGenControl.turnFgenOff()
 
     def scanPercentage(self):
         return (self.Row/self.parameterDictionary["nOfRows"])*100
@@ -103,7 +102,7 @@ class scannerControl:
             picoT1.join()
             if row > 2:
                 simpleIP.showImage(self.parameterDictionary["filename"])
-            motorWrapper.moveY((self.parameterDictionary["yIncrement"]*row)+self.parameterDictionary["yIncrement"])
+            #motorWrapper.moveY((self.parameterDictionary["yIncrement"]*row)+self.parameterDictionary["yIncrement"])
         toc = time.perf_counter()
         print(f'Complete scan took {toc - tic:0.4f} seconds')
 
