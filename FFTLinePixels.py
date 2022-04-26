@@ -18,7 +18,7 @@ filewrite = ctypes.CDLL('./fileio.dll')
 class FFTLine:
     def __init__(self,filename,SamplesPerPixel,CoilFrequency,SensorFrequency,SampleFrequency,Gain):
         now = datetime.now()
-        self.FFTOutFile = now.strftime("%H%MFFTOutput.csv")
+        self.FFTOutFile = f'{filename}.csv'
         self.SamplesPerPixel = SamplesPerPixel
         self.CoilFrequency = CoilFrequency
         self.SensorFrequency = SensorFrequency
@@ -36,10 +36,11 @@ class FFTLine:
         #     b, a = butter_bandpass(lowcut, highcut, fs, order=order)
         #     y = lfilter(b, a, data)
         #     return y
-        f = open(self.FFTOutFile, 'a') # open the file in the write mode
+        f = open(f'./Results/{self.FFTOutFile}', 'a') # open the file in the write mode
         wtr = csv.writer(f, delimiter=',', lineterminator='\n')
-        if (rowCounter)%2 == 0:
-                    rowArray=rowArray[::-1]
+        if (rowCounter)%2 == 1:
+                    print(f'inverting row {rowCounter}')
+                    rowArray=np.flip(rowArray)
 
         def chunks(lst, n): # splits into chunks of n
                     """Yield successive n-sized chunks from lst."""
@@ -107,20 +108,16 @@ class FFTLine:
         up = Q3 + 1.5*IQR
 
         for i in range(len(FFTLinemax)):
-            #FFTLinemax[i] = FFTLinemax[i] - (aver)
+            
             if FFTLinemax[i]>up or FFTLinemax[i]<low:
                 FFTLinemax[i] = aver
             
-            # elif FFTLinemax[i]<(0):
-            #     FFTLinemax[i]= 0
-            else:
-               # FFTLinemax[i]=np.abs(FFTLinemax[i])
-                FFTLinemax[i]=FFTLinemax[i]
 
+            FFTLinemax[i] = FFTLinemax[i] - aver
             #FFTLinemax[i] = FFTLinemax[i]*(255/(np.amax(FFTLinemax)-np.amin(FFTLinemax)))
-        print (aver)
-        print(up)
-        print(low)
+        # print (aver)
+        # print(up)
+        # print(low)
         
         aver = 0
         sum = 0

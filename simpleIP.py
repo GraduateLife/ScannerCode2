@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 
 def showImage(filename):
     
-    img = pd.read_csv(filename)
+    img = pd.read_csv(f'./Results/{filename}.csv')
     imgArray = np.asarray(img)
     print(imgArray.shape)
     rows, columns = imgArray.shape
@@ -32,7 +32,6 @@ def showImage(filename):
     # cv.waitKey(0)
     # cv.destroyAllWindows
     plt.imshow(resized,cmap='Blues')
-    plt.savefig('ScanOutput.png')
+    plt.savefig(f'./Results/{filename}.png')
 
-
-
+showImage('2204FFTOutput1231')

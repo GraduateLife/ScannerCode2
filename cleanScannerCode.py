@@ -6,6 +6,7 @@ import FFTLinePixels as FFTLinePixels
 import scanParams
 import threading
 import time
+import json
 from datetime import datetime
 import simpleIP
 #import contour
@@ -26,6 +27,10 @@ class scannerControl:
     
     
         self.parameterDictionary = parameterDictionary
+
+        with open(f'./Results/{self.parameterDictionary["filename"]}.json','w') as fp:
+            json.dump(self.parameterDictionary,fp)
+
         print(parameterDictionary)
         fGenControl.setFgenParams(self.parameterDictionary["coilFrequency"],self.parameterDictionary["coilAmplitude"],
                                 self.parameterDictionary["sensorFrequency"],self.parameterDictionary["sensorAmplitude"])
@@ -94,15 +99,20 @@ class scannerControl:
             self.Row == row
             picoT1 = threading.Thread(target=self.picoOb.GetVal,args=(self.parameterDictionary["bufferSize"],row,self.fft))
             print(f'writing to row {row}')
-            picoT1.start()
+            
             if row % 2 == 0:
+                motorWrapper.setXspeed(self.parameterDictionary["motorSpeed"])
+                picoT1.start()
                 motorWrapper.moveX(self.parameterDictionary["xStepRange"])
             else:
+                motorWrapper.setXspeed(1000)
                 motorWrapper.moveX(0)
-            picoT1.join()
-            if row > 2:
+            if row % 2 == 0:
+                picoT1.join()
+        
+            if row > 5:
                 simpleIP.showImage(self.parameterDictionary["filename"])
-            #motorWrapper.moveY((self.parameterDictionary["yIncrement"]*row)+self.parameterDictionary["yIncrement"])
+            motorWrapper.moveY((self.parameterDictionary["yIncrement"]*row)+self.parameterDictionary["yIncrement"])
         toc = time.perf_counter()
         print(f'Complete scan took {toc - tic:0.4f} seconds')
 
