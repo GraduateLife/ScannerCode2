@@ -25,8 +25,9 @@ class scannerControl:
     
     #these variables will need to be moved to the gui code
     
-    
         self.parameterDictionary = parameterDictionary
+        scanInput = input('details of this scan: ')
+        self.parameterDictionary["scanNotes"] = scanInput
 
         with open(f'./Results/{self.parameterDictionary["filename"]}.json','w') as fp:
             json.dump(self.parameterDictionary,fp)
@@ -79,7 +80,7 @@ class scannerControl:
         motorWrapper.moveX(0)
         motorWrapper.moveY(0)
         self.picoOb.ClosePico()
-        #fGenControl.turnFgenOff()
+        fGenControl.turnFgenOff()
 
     def scanPercentage(self):
         return (self.Row/self.parameterDictionary["nOfRows"])*100
@@ -101,6 +102,7 @@ class scannerControl:
             print(f'writing to row {row}')
             
             if row % 2 == 0:
+                motorWrapper.moveY((self.parameterDictionary["yIncrement"]*row)+self.parameterDictionary["yIncrement"])
                 motorWrapper.setXspeed(self.parameterDictionary["motorSpeed"])
                 picoT1.start()
                 motorWrapper.moveX(self.parameterDictionary["xStepRange"])
@@ -112,7 +114,7 @@ class scannerControl:
         
             if row > 5:
                 simpleIP.showImage(self.parameterDictionary["filename"])
-            motorWrapper.moveY((self.parameterDictionary["yIncrement"]*row)+self.parameterDictionary["yIncrement"])
+            #if row % 2 == 0:
         toc = time.perf_counter()
         print(f'Complete scan took {toc - tic:0.4f} seconds')
 
